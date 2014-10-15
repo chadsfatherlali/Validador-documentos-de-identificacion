@@ -1,4 +1,4 @@
-Validador documentos de identificacion
+Validador documentos de identificación
 ======================================
 
 Validador de documento de identificación tipo NIE, NIF, CIF y DNI, modo de uso:
