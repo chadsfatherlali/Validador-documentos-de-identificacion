@@ -3,12 +3,27 @@
 var validadorDocumentos = function() {
      return {
           validarCIF: function(string) {
-               var regexp = /^[A-z]([0-9]{8}|-[0-9]{8})$/i;
-               var stringProcesado;
-               var digitoControl;
+               var regexp = /^[A-z]([0-9]{7}|-[0-9]{7})[A-z0-9]$/i;
+               var stringProcesado;               
                var pares = [];
                var impares = [];
                var A = 0, B = 0, C = 0;
+               var tipoDigitoControlLetra = ["K", "Q", "S"];
+               var tipoDigitoControlNumero = ["A", "B", "E", "H"];
+               var letraInicio = string.substr(0, 1).toUpperCase();
+               var digitoFinal = string.substr(string.length - 1, string.length - 1);
+               var tablaEquivalencia = {
+                    0: "J",
+                    1: "A",
+                    2: "B",
+                    3: "C",
+                    4: "D",
+                    5: "E",
+                    6: "F",
+                    7: "G",
+                    8: "H",
+                    9: "I"
+               };
 
                if(!regexp.test(string)) return false;
 
@@ -46,18 +61,28 @@ var validadorDocumentos = function() {
                }
 
                C = (A + B);
-               C = 10 - parseInt(C.toString().substr(1, 2));
+               C = (parseInt(C.toString().substr(1, 2)) == 0)? 0 : 10 - parseInt(C.toString().substr(1, 2));
 
-               try{
+               try {
                     console.log("A", A);
                     console.log("B", B);
                     console.log("C", C);
                     console.log("CIF", string);
                }    
 
-               catch(err){}
+               catch(err) {}
 
-               if(C != string.substr(string.length - 1, string.length)) return false;
+               if(tipoDigitoControlLetra.indexOf(letraInicio) > -1) {
+                    if(tablaEquivalencia[C] != digitoFinal) return false;
+               }
+
+               else if (tipoDigitoControlNumero.indexOf(letraInicio) > -1) {                    
+                    if(C != digitoFinal) return false;
+               }
+
+               else {
+                    if(tablaEquivalencia[C] != digitoFinal && C != digitoFinal) return false;
+               }
 
                return true;
           },
@@ -111,11 +136,11 @@ var validadorDocumentos = function() {
                       
                A = parseInt(stringProcesado) % 23;
                   
-               try{
+               try {
                     console.log("A", tablaEquivalencia[A]);
                }
 
-               catch(err){}
+               catch(err) {}
 
                if(digitoControlFinal.toUpperCase() != tablaEquivalencia[A]) return false;
 
